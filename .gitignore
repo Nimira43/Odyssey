@@ -1,26 +1,54 @@
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+.env/
+.env.local
+.venv/
+env/
+ENV/
+.venv/
+env.bak/
+venv.bak/
+
 # Django
 *.log
 *.pot
 *.pyc
 __pycache__/
 local_settings.py
-
-# Databases
 db.sqlite3
-*.sqlite3
+media
 
-# Environments
-.env
-.venv/
-venv/
-env/
-ENV/
-
-# Poetry
+# If you are using poetry
 poetry.lock
 
-# VSCode
-.vscode/
+# If you are using pipenv
+Pipfile.lock
 
-# MacOS
+# If you are using .env files
+.env
+
+# If your project includes static files
+/static/
+
+# If you use Jupyter notebooks
+.ipynb_checkpoints
+
+# If you use mypy
+.mypy_cache/
+
+# If you use Pytest
+.pytest_cache/
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# System files
 .DS_Store
+Thumbs.db
