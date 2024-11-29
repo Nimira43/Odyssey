@@ -6,7 +6,7 @@ ARTICLE_STATUS = (
   ('draft', 'draft'), 
   ('inprogress', 'in progress'), 
   ('published', 'published'),
-),
+)
 
 class UserProfile(AbstractUser):
   pass
