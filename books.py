@@ -17,3 +17,6 @@ BOOKS = [
 @app.get('/books')
 async def read_all_books():
   return BOOKS
+
+async def read_all_books(dynamic_param):
+  return {'dynamic_param'}
