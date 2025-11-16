@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./images/TheFavicon.png">
+  <link rel="stylesheet" href="./styles.css">
+  <title>League Generator</title>
+</head>
+<body>
+  <h1>League Generator</h1>
+
+  <div id="setup">
+    <label>Number of teams: 
+      <input type="number" id="numTeams" min="2" max="20">
+    </label>
+    <button onclick="createTeamInputs()">Next</button>
+    <div id="teamInputs"></div>
+  </div>
+
+  <div id="league" class="hidden">
+    <h2>Fixtures</h2>
+    <div id="fixtures" class="fixtures"></div>
+
+    <h2>League Table</h2>
+    <table id="leagueTable">
+      <thead>
+        <tr>
+          <th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th>
+          <th>GF</th><th>GA</th><th>GD</th><th>Pts</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <script src="./script.js"></script>
+</body>
+</html>
