@@ -14,7 +14,7 @@
   </style>
 </head>
 <body>
-  <h1>The Sia League</h1>
+  <h1>The Test League</h1>
 
   <div id="fixtures" class="fixtures"></div>
 

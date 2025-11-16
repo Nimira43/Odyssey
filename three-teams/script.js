@@ -1,13 +1,13 @@
-const teams = ["Alpha", "Beta", "Delta"]
+const teams = ['Alpha', 'Beta', 'Delta']
 
 // Generate fixtures (home & away, round robin)
 const fixtures = [
-  {week:1, home:"Alpha", away:"Beta"},
-  {week:1, home:"Delta", away:"Alpha"},
-  {week:2, home:"Beta", away:"Delta"},
-  {week:2, home:"Beta", away:"Alpha"},
-  {week:3, home:"Delta", away:"Beta"},
-  {week:3, home:"Alpha", away:"Delta"},
+  {week:1, home:'Alpha', away:'Beta'},
+  {week:1, home:'Delta', away:'Alpha'},
+  {week:2, home:'Beta', away:'Delta'},
+  {week:2, home:'Beta', away:'Alpha'},
+  {week:3, home:'Delta', away:'Beta'},
+  {week:3, home:'Alpha', away:'Delta'},
 ]
 
 // League table data
@@ -18,8 +18,8 @@ teams.forEach(t => {
 
 // Render fixtures with input boxes
 function renderFixtures() {
-  const container = document.getElementById("fixtures")
-  container.innerHTML = ""
+  const container = document.getElementById('fixtures')
+  container.innerHTML = ''
   let currentWeek = 0
   fixtures.forEach((f,i) => {
     if (f.week !== currentWeek) {
@@ -29,10 +29,10 @@ function renderFixtures() {
     container.innerHTML += `
       <div>
         ${f.home} vs ${f.away} :
-        <input type="number" id="home${i}" min="0" style="width:40px">
+        <input type='number' id='home${i}' min='0' style='width:40px'>
         -
-        <input type="number" id="away${i}" min="0" style="width:40px">
-        <button onclick="submitResult(${i})">Submit</button>
+        <input type='number' id='away${i}' min='0' style='width:40px'>
+        <button onclick='submitResult(${i})'>Submit</button>
       </div>
     `
   })
@@ -41,8 +41,8 @@ function renderFixtures() {
 // Update table after result
 function submitResult(i) {
   const f = fixtures[i]
-  const hg = parseInt(document.getElementById("home"+i).value)
-  const ag = parseInt(document.getElementById("away"+i).value)
+  const hg = parseInt(document.getElementById('home'+i).value)
+  const ag = parseInt(document.getElementById('away'+i).value)
   if (isNaN(hg) || isNaN(ag)) return
 
   // Update stats
@@ -65,8 +65,8 @@ function updateTeam(team, gf, ga) {
 
 // Render league table
 function renderTable() {
-  const tbody = document.querySelector("#leagueTable tbody")
-  tbody.innerHTML = ""
+  const tbody = document.querySelector('#leagueTable tbody')
+  tbody.innerHTML = ''
   const sorted = Object.entries(table).sort((a,b) => b[1].Pts - a[1].Pts || b[1].GD - a[1].GD)
   sorted.forEach(([team,stats]) => {
     tbody.innerHTML += `

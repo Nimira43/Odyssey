@@ -1,0 +1,85 @@
+const teams = ['Alpha', 'Beta', 'Delta', 'Echo'] 
+
+// Balanced round-robin fixtures
+const fixtures = [
+  {week:1, matches:[{home:'Alpha',away:'Beta'},{home:'Delta',away:'Echo'}]},
+  {week:2, matches:[{home:'Beta',away:'Delta'},{home:'Echo',away:'Alpha'}]},
+  {week:3, matches:[{home:'Alpha',away:'Delta'},{home:'Beta',away:'Echo'}]},
+  {week:4, matches:[{home:'Beta',away:'Alpha'},{home:'Echo',away:'Delta'}]},
+  {week:5, matches:[{home:'Delta',away:'Beta'},{home:'Alpha',away:'Echo'}]},
+  {week:6, matches:[{home:'Delta',away:'Alpha'},{home:'Echo',away:'Beta'}]},
+];
+
+// League table data
+let table = {} 
+teams.forEach(t => {
+  table[t] = {P:0,W:0,D:0,L:0,GF:0,GA:0,GD:0,Pts:0} 
+})
+
+// Render fixtures with input boxes
+function renderFixtures() {
+  const container = document.getElementById('fixtures') 
+  container.innerHTML = '' 
+  fixtures.forEach((f, weekIndex) => {
+    let html = `<div class='week'><h2>Week ${f.week} Fixtures</h2>`
+    f.matches.forEach((m, matchIndex) => {
+      let id = `${weekIndex}-${matchIndex}`
+      html += `
+        <div>
+          ${m.home} vs ${m.away} :
+          <input type='number' id='home${id}' min='0' style='width:40px'>
+          -
+          <input type='number' id='away${id}' min='0' style='width:40px'>
+          <button onclick='submitResult(${weekIndex},${matchIndex})'>Submit</button>
+        </div>
+      `
+    })
+    html += '</div>'
+    container.innerHTML += html
+  })
+}
+
+// Update table after result
+function submitResult(weekIndex, matchIndex) {
+  const m = fixtures[weekIndex].matches[matchIndex]
+  const id = `${weekIndex}-${matchIndex}`
+  const hg = parseInt(document.getElementById('home'+id).value)
+  const ag = parseInt(document.getElementById('away'+id).value)
+  if (isNaN(hg) || isNaN(ag)) return
+
+  updateTeam(m.home, hg, ag)
+  updateTeam(m.away, ag, hg)
+
+  renderTable()
+}
+
+function updateTeam(team, gf, ga) {
+  const t = table[team]
+  t.P++
+  t.GF += gf
+  t.GA += ga
+  t.GD = t.GF - t.GA
+  if (gf > ga) { t.W++; t.Pts += 3; }
+  else if (gf === ga) { t.D++; t.Pts += 1; }
+  else { t.L++; }
+}
+
+// Render league table
+function renderTable() {
+  const tbody = document.querySelector('#leagueTable tbody')
+  tbody.innerHTML = ''
+  const sorted = Object.entries(table).sort((a,b) => b[1].Pts - a[1].Pts || b[1].GD - a[1].GD)
+  sorted.forEach(([team,stats]) => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${team}</td>
+        <td>${stats.P}</td><td>${stats.W}</td><td>${stats.D}</td><td>${stats.L}</td>
+        <td>${stats.GF}</td><td>${stats.GA}</td><td>${stats.GD}</td><td>${stats.Pts}</td>
+      </tr>
+    `
+  })
+}
+
+// Init
+renderFixtures()
+renderTable()
