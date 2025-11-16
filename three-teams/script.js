@@ -1,0 +1,84 @@
+const teams = ["Alpha", "Beta", "Delta"]
+
+// Generate fixtures (home & away, round robin)
+const fixtures = [
+  {week:1, home:"Alpha", away:"Beta"},
+  {week:1, home:"Delta", away:"Alpha"},
+  {week:2, home:"Beta", away:"Delta"},
+  {week:2, home:"Beta", away:"Alpha"},
+  {week:3, home:"Delta", away:"Beta"},
+  {week:3, home:"Alpha", away:"Delta"},
+]
+
+// League table data
+let table = {}
+teams.forEach(t => {
+  table[t] = {P:0,W:0,D:0,L:0,GF:0,GA:0,GD:0,Pts:0}
+})
+
+// Render fixtures with input boxes
+function renderFixtures() {
+  const container = document.getElementById("fixtures")
+  container.innerHTML = ""
+  let currentWeek = 0
+  fixtures.forEach((f,i) => {
+    if (f.week !== currentWeek) {
+      currentWeek = f.week
+      container.innerHTML += `<h2>Week ${currentWeek} Fixtures</h2>`
+    }
+    container.innerHTML += `
+      <div>
+        ${f.home} vs ${f.away} :
+        <input type="number" id="home${i}" min="0" style="width:40px">
+        -
+        <input type="number" id="away${i}" min="0" style="width:40px">
+        <button onclick="submitResult(${i})">Submit</button>
+      </div>
+    `
+  })
+}
+
+// Update table after result
+function submitResult(i) {
+  const f = fixtures[i]
+  const hg = parseInt(document.getElementById("home"+i).value)
+  const ag = parseInt(document.getElementById("away"+i).value)
+  if (isNaN(hg) || isNaN(ag)) return
+
+  // Update stats
+  updateTeam(f.home, hg, ag)
+  updateTeam(f.away, ag, hg)
+
+  renderTable()
+}
+
+function updateTeam(team, gf, ga) {
+  const t = table[team]
+  t.P++
+  t.GF += gf
+  t.GA += ga
+  t.GD = t.GF - t.GA
+  if (gf > ga) { t.W++; t.Pts += 3; }
+  else if (gf === ga) { t.D++; t.Pts += 1; }
+  else { t.L++; }
+}
+
+// Render league table
+function renderTable() {
+  const tbody = document.querySelector("#leagueTable tbody")
+  tbody.innerHTML = ""
+  const sorted = Object.entries(table).sort((a,b) => b[1].Pts - a[1].Pts || b[1].GD - a[1].GD)
+  sorted.forEach(([team,stats]) => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${team}</td>
+        <td>${stats.P}</td><td>${stats.W}</td><td>${stats.D}</td><td>${stats.L}</td>
+        <td>${stats.GF}</td><td>${stats.GA}</td><td>${stats.GD}</td><td>${stats.Pts}</td>
+      </tr>
+    `
+  })
+}
+
+// Init
+renderFixtures()
+renderTable()
