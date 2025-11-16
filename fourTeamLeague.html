@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Test League</title>
+  <title>Sia League</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
     h1 { color: darkblue; }
@@ -10,10 +10,11 @@
     th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
     th { background: #eee; }
     .fixtures { margin-bottom: 30px; }
+    .week { margin-top: 20px; }
   </style>
 </head>
 <body>
-  <h1>The Test League</h1>
+  <h1>The Sia League</h1>
 
   <div id="fixtures" class="fixtures"></div>
 
@@ -29,56 +30,57 @@
   </table>
 
 <script>
-const teams = ["Alpha", "Beta", "Delta"]
+const teams = ["Alpha", "Beta", "Delta", "Echo"] 
 
-// Generate fixtures (home & away, round robin)
+// Balanced round-robin fixtures
 const fixtures = [
-  {week:1, home:"Alpha", away:"Beta"},
-  {week:1, home:"Delta", away:"Alpha"},
-  {week:2, home:"Beta", away:"Delta"},
-  {week:2, home:"Beta", away:"Alpha"},
-  {week:3, home:"Delta", away:"Beta"},
-  {week:3, home:"Alpha", away:"Delta"},
-]
+  {week:1, matches:[{home:"Alpha",away:"Beta"},{home:"Delta",away:"Echo"}]},
+  {week:2, matches:[{home:"Beta",away:"Delta"},{home:"Echo",away:"Alpha"}]},
+  {week:3, matches:[{home:"Alpha",away:"Delta"},{home:"Beta",away:"Echo"}]},
+  {week:4, matches:[{home:"Beta",away:"Alpha"},{home:"Echo",away:"Delta"}]},
+  {week:5, matches:[{home:"Delta",away:"Beta"},{home:"Alpha",away:"Echo"}]},
+  {week:6, matches:[{home:"Delta",away:"Alpha"},{home:"Echo",away:"Beta"}]},
+];
 
 // League table data
-let table = {}
+let table = {} 
 teams.forEach(t => {
-  table[t] = {P:0,W:0,D:0,L:0,GF:0,GA:0,GD:0,Pts:0}
-})
+  table[t] = {P:0,W:0,D:0,L:0,GF:0,GA:0,GD:0,Pts:0} 
+});
 
 // Render fixtures with input boxes
 function renderFixtures() {
-  const container = document.getElementById("fixtures")
-  container.innerHTML = ""
-  let currentWeek = 0
-  fixtures.forEach((f,i) => {
-    if (f.week !== currentWeek) {
-      currentWeek = f.week
-      container.innerHTML += `<h2>Week ${currentWeek} Fixtures</h2>`
-    }
-    container.innerHTML += `
-      <div>
-        ${f.home} vs ${f.away} :
-        <input type="number" id="home${i}" min="0" style="width:40px">
-        -
-        <input type="number" id="away${i}" min="0" style="width:40px">
-        <button onclick="submitResult(${i})">Submit</button>
-      </div>
-    `
+  const container = document.getElementById("fixtures") 
+  container.innerHTML = "" 
+  fixtures.forEach((f, weekIndex) => {
+    let html = `<div class="week"><h2>Week ${f.week} Fixtures</h2>`
+    f.matches.forEach((m, matchIndex) => {
+      let id = `${weekIndex}-${matchIndex}`
+      html += `
+        <div>
+          ${m.home} vs ${m.away} :
+          <input type="number" id="home${id}" min="0" style="width:40px">
+          -
+          <input type="number" id="away${id}" min="0" style="width:40px">
+          <button onclick="submitResult(${weekIndex},${matchIndex})">Submit</button>
+        </div>
+      `
+    })
+    html += "</div>"
+    container.innerHTML += html
   })
 }
 
 // Update table after result
-function submitResult(i) {
-  const f = fixtures[i]
-  const hg = parseInt(document.getElementById("home"+i).value)
-  const ag = parseInt(document.getElementById("away"+i).value)
+function submitResult(weekIndex, matchIndex) {
+  const m = fixtures[weekIndex].matches[matchIndex]
+  const id = `${weekIndex}-${matchIndex}`
+  const hg = parseInt(document.getElementById("home"+id).value)
+  const ag = parseInt(document.getElementById("away"+id).value)
   if (isNaN(hg) || isNaN(ag)) return
 
-  // Update stats
-  updateTeam(f.home, hg, ag)
-  updateTeam(f.away, ag, hg)
+  updateTeam(m.home, hg, ag)
+  updateTeam(m.away, ag, hg)
 
   renderTable()
 }
