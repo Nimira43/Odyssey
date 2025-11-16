@@ -1,7 +1,7 @@
 function App() {
   return (
-    <div>
-      <h1>Odyssey</h1>
+    <div className='bg-orange-500 text-white p-6 '>
+      <h1 className='logo text-6xl'>Odyssey</h1>
       <h4>Football League Generator</h4>      
     </div>
   )
