@@ -3,21 +3,21 @@ let fixtures = []
 let table = {}
 
 function createTeamInputs() {
-  const num = parseInt(document.getElementById("numTeams").value)
+  const num = parseInt(document.getElementById('numTeams').value)
   if (isNaN(num) || num < 2) return
-  const container = document.getElementById("teamInputs")
-  container.innerHTML = "";
+  const container = document.getElementById('teamInputs')
+  container.innerHTML = ''
   for (let i=0; i<num; i++) {
-    container.innerHTML += `<div>Team ${i+1}: <input type="text" id="team${i}"></div>`
+    container.innerHTML += `<div>Team ${i+1}: <input type='text' id='team${i}'></div>`
   }
-  container.innerHTML += `<button onclick="startLeague(${num})">Generate League</button>`
+  container.innerHTML += `<button onclick='startLeague(${num})'>Generate League</button>`
 }
 
 function startLeague(num) {
   teams = []
   for (let i=0; i<num; i++) {
-    let name = document.getElementById("team"+i).value.trim()
-    if (!name) name = "Team"+(i+1)
+    let name = document.getElementById('team'+i).value.trim()
+    if (!name) name = 'Team'+(i+1)
     teams.push(name)
   }
 
@@ -25,12 +25,12 @@ function startLeague(num) {
   initTable()
   renderFixtures()
   renderTable()
-  document.getElementById("league").classList.remove("hidden")
+  document.getElementById('league').classList.remove('hidden')
 }
 
 function generateFixtures(teamList) {
   if (teamList.length % 2 !== 0) {
-    teamList.push("Bye") // add bye if odd
+    teamList.push('Bye') // add bye if odd
   }
   const n = teamList.length
   const rounds = n - 1
@@ -41,7 +41,7 @@ function generateFixtures(teamList) {
     for (let i = 0; i < n/2; i++) {
       let home = teamList[i]
       let away = teamList[n-1-i]
-      if (home !== "Bye" && away !== "Bye") {
+      if (home !== 'Bye' && away !== 'Bye') {
         if (r % 2 === 0) {
           week.matches.push({home, away})
         } else {
@@ -64,23 +64,23 @@ function initTable() {
 }
 
 function renderFixtures() {
-  const container = document.getElementById("fixtures")
-  container.innerHTML = ""
+  const container = document.getElementById('fixtures')
+  container.innerHTML = ''
   fixtures.forEach((f, weekIndex) => {
-    let html = `<div class="week"><h3>Week ${f.week}</h3>`
+    let html = `<div class='week'><h3>Week ${f.week}</h3>`
     f.matches.forEach((m, matchIndex) => {
       let id = `${weekIndex}-${matchIndex}`
       html += `
         <div>
           ${m.home} vs ${m.away} :
-          <input type="number" id="home${id}" min="0" style="width:40px">
+          <input type='number' id='home${id}' min='0' style='width:40px'>
           -
-          <input type="number" id="away${id}" min="0" style="width:40px">
-          <button onclick="submitResult(${weekIndex},${matchIndex})">Submit</button>
+          <input type='number' id='away${id}' min='0' style='width:40px'>
+          <button onclick='submitResult(${weekIndex},${matchIndex})'>Submit</button>
         </div>
       `
     })
-    html += "</div>"
+    html += '</div>'
     container.innerHTML += html
   })
 }
@@ -88,8 +88,8 @@ function renderFixtures() {
 function submitResult(weekIndex, matchIndex) {
   const m = fixtures[weekIndex].matches[matchIndex]
   const id = `${weekIndex}-${matchIndex}`
-  const hg = parseInt(document.getElementById("home"+id).value)
-  const ag = parseInt(document.getElementById("away"+id).value)
+  const hg = parseInt(document.getElementById('home'+id).value)
+  const ag = parseInt(document.getElementById('away'+id).value)
   if (isNaN(hg) || isNaN(ag)) return
 
   updateTeam(m.home, hg, ag)
@@ -110,8 +110,8 @@ function updateTeam(team, gf, ga) {
 }
 
 function renderTable() {
-  const tbody = document.querySelector("#leagueTable tbody")
-  tbody.innerHTML = ""
+  const tbody = document.querySelector('#leagueTable tbody')
+  tbody.innerHTML = ''
   const sorted = Object.entries(table).sort((a,b) => b[1].Pts - a[1].Pts || b[1].GD - a[1].GD)
   sorted.forEach(([team,stats]) => {
     tbody.innerHTML += `
